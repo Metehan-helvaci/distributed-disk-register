@@ -5,6 +5,10 @@
 package family;
 
 /**
+ * <pre>
+ *içinde hiçbir alan olmayan boş bir mesaj
+ * </pre>
+ *
  * Protobuf type {@code family.Empty}
  */
 public final class Empty extends
@@ -186,6 +190,10 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
+   * <pre>
+   *içinde hiçbir alan olmayan boş bir mesaj
+   * </pre>
+   *
    * Protobuf type {@code family.Empty}
    */
   public static final class Builder extends

@@ -6,17 +6,21 @@ option java_multiple_files = true;
 option java_package = "family";
 option java_outer_classname = "FamilyProto";
 
+//Proto içinde “message” → Java’da class olur.
+
 message NodeInfo {
   string host = 1;
   int32 port = 2;
 }
 
 message FamilyView {
+//içinde repeated var → liste demek.
   repeated NodeInfo members = 1;
 }
-
+//içinde hiçbir alan olmayan boş bir mesaj
 message Empty {}
 
+//chat mesajını temsil eder.
 message ChatMessage {
   string text = 1;
   string fromHost = 2;
@@ -24,9 +28,32 @@ message ChatMessage {
   int64 timestamp = 4;
 }
 
+// bu kısım grpc fonksiyonlarını rpc tanımlar.
+//FamilyServiceGrpc otomatik olarak oluşur.
 service FamilyService {
   rpc Join (NodeInfo) returns (FamilyView);
   rpc GetFamily (Empty) returns (FamilyView);
 
   rpc ReceiveChat (ChatMessage) returns (Empty);
+}
+//şimdi projenin protolarını yazalım
+//Diskte saklanan mesajı temsil eder
+message StoredMessage {
+  int32 id = 1;
+  string text = 2;
+}
+
+// Sadece id göndermek için
+message MessageId {
+  int32 id = 1;
+}
+
+// Store RPC dönüş objesi
+message StoreResult {
+  bool success = 1;
+  string message = 2; // "OK", "ERROR" vs.
+}
+service StorageService {
+  rpc Store(StoredMessage) returns (StoreResult);
+  rpc Retrieve(MessageId) returns (StoredMessage);
 }

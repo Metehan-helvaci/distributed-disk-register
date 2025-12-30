@@ -9,24 +9,44 @@ public interface FamilyViewOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   java.util.List<family.NodeInfo> 
       getMembersList();
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   family.NodeInfo getMembers(int index);
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   int getMembersCount();
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   java.util.List<? extends family.NodeInfoOrBuilder> 
       getMembersOrBuilderList();
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   family.NodeInfoOrBuilder getMembersOrBuilder(

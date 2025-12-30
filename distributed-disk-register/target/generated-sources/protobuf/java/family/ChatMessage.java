@@ -5,6 +5,10 @@
 package family;
 
 /**
+ * <pre>
+ *chat mesajını temsil eder.
+ * </pre>
+ *
  * Protobuf type {@code family.ChatMessage}
  */
 public final class ChatMessage extends
@@ -331,6 +335,10 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
+   * <pre>
+   *chat mesajını temsil eder.
+   * </pre>
+   *
    * Protobuf type {@code family.ChatMessage}
    */
   public static final class Builder extends

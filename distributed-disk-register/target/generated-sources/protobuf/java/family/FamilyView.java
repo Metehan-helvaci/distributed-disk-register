@@ -44,6 +44,10 @@ private static final long serialVersionUID = 0L;
   @SuppressWarnings("serial")
   private java.util.List<family.NodeInfo> members_;
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   @java.lang.Override
@@ -51,6 +55,10 @@ private static final long serialVersionUID = 0L;
     return members_;
   }
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   @java.lang.Override
@@ -59,6 +67,10 @@ private static final long serialVersionUID = 0L;
     return members_;
   }
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   @java.lang.Override
@@ -66,6 +78,10 @@ private static final long serialVersionUID = 0L;
     return members_.size();
   }
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   @java.lang.Override
@@ -73,6 +89,10 @@ private static final long serialVersionUID = 0L;
     return members_.get(index);
   }
   /**
+   * <pre>
+   *içinde repeated var → liste demek.
+   * </pre>
+   *
    * <code>repeated .family.NodeInfo members = 1;</code>
    */
   @java.lang.Override
@@ -468,6 +488,10 @@ private static final long serialVersionUID = 0L;
         family.NodeInfo, family.NodeInfo.Builder, family.NodeInfoOrBuilder> membersBuilder_;
 
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public java.util.List<family.NodeInfo> getMembersList() {
@@ -478,6 +502,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public int getMembersCount() {
@@ -488,6 +516,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public family.NodeInfo getMembers(int index) {
@@ -498,6 +530,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder setMembers(
@@ -515,6 +551,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder setMembers(
@@ -529,6 +569,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder addMembers(family.NodeInfo value) {
@@ -545,6 +589,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder addMembers(
@@ -562,6 +610,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder addMembers(
@@ -576,6 +628,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder addMembers(
@@ -590,6 +646,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder addAllMembers(
@@ -605,6 +665,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder clearMembers() {
@@ -618,6 +682,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public Builder removeMembers(int index) {
@@ -631,6 +699,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public family.NodeInfo.Builder getMembersBuilder(
@@ -638,6 +710,10 @@ private static final long serialVersionUID = 0L;
       return getMembersFieldBuilder().getBuilder(index);
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public family.NodeInfoOrBuilder getMembersOrBuilder(
@@ -648,6 +724,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public java.util.List<? extends family.NodeInfoOrBuilder> 
@@ -659,6 +739,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public family.NodeInfo.Builder addMembersBuilder() {
@@ -666,6 +750,10 @@ private static final long serialVersionUID = 0L;
           family.NodeInfo.getDefaultInstance());
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public family.NodeInfo.Builder addMembersBuilder(
@@ -674,6 +762,10 @@ private static final long serialVersionUID = 0L;
           index, family.NodeInfo.getDefaultInstance());
     }
     /**
+     * <pre>
+     *içinde repeated var → liste demek.
+     * </pre>
+     *
      * <code>repeated .family.NodeInfo members = 1;</code>
      */
     public java.util.List<family.NodeInfo.Builder> 
