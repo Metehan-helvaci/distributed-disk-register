@@ -1,0 +1,76 @@
+package grpc;
+
+import family.StoredMessage;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
+/*
+ * Disk işlemlerinden sorumlu sınıf.
+ * Mesajlar buffered I/O kullanılarak diske yazılır.
+ */
+public class MessageStore {
+
+    private static final String BASE_DIR = "messages";
+
+    /**
+     * Mesajı buffered şekilde diske yazar
+     */
+    public static void store(int id, String message) throws IOException {
+
+        Path dir = Paths.get(BASE_DIR);
+        if (!Files.exists(dir)) {
+            Files.createDirectories(dir);
+        }
+
+        Path file = dir.resolve(id + ".msg");
+
+        try (BufferedWriter writer = Files.newBufferedWriter(
+                file,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING
+        )) {
+            writer.write(message);
+            writer.flush(); // buffer → disk
+        }
+    }
+
+    /**
+     * Mesajı diskten buffered olarak okur
+     */
+    public static StoredMessage load(int id) throws IOException {
+
+        Path file = Paths.get(BASE_DIR, id + ".msg");
+
+        if (!Files.exists(file)) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        }
+
+        return StoredMessage.newBuilder()
+                .setId(id)
+                .setText(sb.toString())
+                .build();
+    }
+
+    /**
+     * Mesaj diskte var mı?
+     */
+    public static boolean exists(int id) {
+        Path file = Paths.get(BASE_DIR, id + ".msg");
+        return Files.exists(file);
+    }
+}
