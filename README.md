@@ -161,7 +161,9 @@ Testlerde:
 - 1000 SET sonrası üyelerde yaklaşık eşit dağılım gözlemlenmiştir
 - Bu resimde tolerance değeri 2 olduğu için her bir mesaj 2 üyede saklanmıştır.
 <img width="368" height="99" alt="Ekran Resmi 2026-01-03 13 27 23" src="https://github.com/user-attachments/assets/c9ab30ff-236f-43cb-a473-94751a4cbffa" />
-- Bu resimde Toplam kaydedilen mesaj sayısını gösterir
+
+
+- Bu resimde Storage Stats içinde toplam kaydedilen mesaj sayısını gösterir
 <img width="246" height="56" alt="Ekran Resmi 2026-01-03 13 27 46" src="https://github.com/user-attachments/assets/6dcb00bb-f2f9-446d-8482-ab9363b70725" />
 
 
