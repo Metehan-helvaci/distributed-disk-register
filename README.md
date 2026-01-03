@@ -218,3 +218,5 @@ mvn exec:java "-Dexec.mainClass=com.example.family.NodeMain"
 
 Lider ve üyeler farklı terminallerden başlatılarak test edilebilir.
 Teşekkürler.
+
+
