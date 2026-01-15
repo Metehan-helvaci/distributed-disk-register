@@ -11,7 +11,11 @@ import java.nio.file.*;
  */
 public class MessageStore {
 
-    private static final String BASE_DIR = "messages";
+    private static  String BASE_DIR = "messages";
+
+    public static void setBaseDir(String dir) {
+        BASE_DIR = dir;
+    }
 
     /*
      * Mesajı diske yazar

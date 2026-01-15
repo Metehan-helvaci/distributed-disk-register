@@ -43,6 +43,8 @@ public class NodeMain {
 
         String host = "127.0.0.1";
         int port = findFreePort(START_PORT);
+
+        grpc.MessageStore.setBaseDir("messages_" + port);
         //Kendi node bilgisini oluşturur.
         NodeInfo self = NodeInfo.newBuilder()
                 .setHost(host)
@@ -128,34 +130,89 @@ public class NodeMain {
                     continue;
                 }
 
+                // Canlı node'ları al
                 List<NodeInfo> aliveNodes = registry.snapshot()
                         .stream()
                         .filter(n -> !n.equals(self))
                         .toList();
 
-                List<NodeInfo> replicas =
-                        selectReplicas(aliveNodes, TOLERANCE);
-
-
-                // 🔹 LEADER CHANNEL + CONTEXT
+                // Lider ile bağlantı kur
                 ManagedChannel leaderChannel = ManagedChannelBuilder
                         .forAddress(self.getHost(), self.getPort())
                         .usePlaintext()
                         .build();
 
-                var leaderStub =
-                        family.StorageServiceGrpc.newBlockingStub(leaderChannel);
-                CommandContext leaderContext =
-                        new CommandContext(leaderStub);
+                var leaderStub = family.StorageServiceGrpc.newBlockingStub(leaderChannel);
+                CommandContext leaderContext = new CommandContext(leaderStub);
 
-                // 🟡 GET → SADECE LEADER
-                if (command instanceof GetCommand) {
+                // ==========================================
+                // 🟡 GET İŞLEMİ (Geliştirilmiş Fallback)
+                // ==========================================
+                if (command instanceof GetCommand getCmd) {
+                    System.out.println("🔍 GET İsteği geldi: ID=" + getCmd.getId());
+
+                    // 1. Önce Lider'e sor
                     String result = command.execute(leaderContext);
+                    System.out.println("   👉 Lider Cevabı: " + result);
+
+                    // 2. Eğer Liderde dosya yoksa (NOT_FOUND) replikalara sor
+                    if ("NOT_FOUND".equals(result)) {
+                        System.out.println("   ⚠️ Liderde veri yok. Üyelere soruluyor...");
+
+                        // Kimlere soracağız?
+                        List<NodeInfo> candidates = messageLocations.get(getCmd.getId());
+
+                        // Eğer map boşsa (restart sonrası) veya liste boşsa, tüm canlı node'lara saldır
+                        if (candidates == null || candidates.isEmpty()) {
+                            System.out.println("   ℹ️ Konum bilgisi hafızada yok, tüm canlı node'lara bakılıyor.");
+                            candidates = aliveNodes;
+                        }
+
+                        if (candidates.isEmpty()) {
+                            System.out.println("   ❌ Hiçbir canlı üye (replica) bulunamadı! Çaresizim.");
+                        }
+
+                        for (NodeInfo member : candidates) {
+                            if (member.equals(self)) continue; // Kendine sorma
+
+                            System.out.println("   📞 Üyeye soruluyor: " + member.getPort());
+                            try {
+                                ManagedChannel replicaChannel = ManagedChannelBuilder
+                                        .forAddress(member.getHost(), member.getPort())
+                                        .usePlaintext()
+                                        .build();
+
+                                var replicaStub = family.StorageServiceGrpc.newBlockingStub(replicaChannel)
+                                        .withDeadlineAfter(500, TimeUnit.MILLISECONDS);
+
+                                CommandContext replicaContext = new CommandContext(replicaStub);
+                                String replicaResult = command.execute(replicaContext);
+
+                                replicaChannel.shutdownNow();
+
+                                System.out.println("      👉 Üye (" + member.getPort() + ") Cevabı: " + replicaResult);
+
+                                if (!"NOT_FOUND".equals(replicaResult) && !"RPC_ERROR".equals(replicaResult)) {
+                                    System.out.println("   ✅ VERİ BULUNDU! Kurtarıldı.");
+                                    result = replicaResult;
+                                    break; // Bulduk, döngüyü kır
+                                }
+                            } catch (Exception e) {
+                                System.err.println("      ❌ Üye erişim hatası (" + member.getPort() + "): " + e.getMessage());
+                            }
+                        }
+                    }
+
                     out.write(result + "\n");
                     out.flush();
                     leaderChannel.shutdownNow();
                     continue;
                 }
+
+                // ... SET İŞLEMLERİ AYNI KALACAK ...
+                // Burası kodun geri kalanı (SET işlemi) için gerekli
+                // Replicas seçimi
+                List<NodeInfo> replicas = selectReplicas(aliveNodes, TOLERANCE);
 
                 // 🟢 SET → ÖNCE REPLICAS
                 boolean allOk = true;
@@ -169,16 +226,13 @@ public class NodeMain {
                                 .usePlaintext()
                                 .build();
 
-                        var storageStub =
-                                family.StorageServiceGrpc.newBlockingStub(channel)
-                                        .withDeadlineAfter(300, TimeUnit.MILLISECONDS);
+                        var storageStub = family.StorageServiceGrpc.newBlockingStub(channel)
+                                .withDeadlineAfter(500, TimeUnit.MILLISECONDS);
 
-                        CommandContext context =
-                                new CommandContext(storageStub);
+                        CommandContext context = new CommandContext(storageStub);
+                        String setRes = command.execute(context);
 
-                        String result = command.execute(context);
-
-                        if (!"OK".equals(result)) {
+                        if (!"OK".equals(setRes)) {
                             allOk = false;
                         } else {
                             writtenNodes.add(n);
@@ -186,16 +240,13 @@ public class NodeMain {
                                 messageId = setCmd.getId();
                             }
                         }
-
                         channel.shutdownNow();
-
                     } catch (Exception e) {
                         registry.remove(n);
                         allOk = false;
                     }
                 }
 
-                // ❌ REPLICA’LARDAN BİRİ FAIL → LEADER YAZMAZ
                 if (!allOk) {
                     out.write("ERROR\n");
                     out.flush();
@@ -203,32 +254,30 @@ public class NodeMain {
                     continue;
                 }
 
-                // 🔥 HER ŞEY OK → LEADER YAZAR
+                // LEADER YAZAR
                 String leaderResult = command.execute(leaderContext);
                 out.write(leaderResult + "\n");
 
                 if (messageId != null) {
+                    writtenNodes.add(self); // Lideri de listeye ekle
                     messageLocations.put(messageId, writtenNodes);
+                    System.out.println("💾 Kayıt konumu güncellendi. ID: " + messageId + " Node sayısı: " + writtenNodes.size());
                 }
 
                 out.flush();
                 leaderChannel.shutdownNow();
 
-                // (Opsiyonel log / broadcast kısmı aynen kalabilir)
+                // Broadcast
                 String text = line.trim();
                 if (text.isEmpty()) continue;
-
                 long ts = System.currentTimeMillis();
-
                 System.out.println("📝 Received from TCP: " + text);
-
                 ChatMessage msg = ChatMessage.newBuilder()
                         .setText(text)
                         .setFromHost(self.getHost())
                         .setFromPort(self.getPort())
                         .setTimestamp(ts)
                         .build();
-
                 broadcastToFamily(registry, self, msg);
             }
 
@@ -237,14 +286,9 @@ public class NodeMain {
         } finally {
             try {
                 client.close();
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
         }
     }
-
-
-
-
     private static void broadcastToFamily(NodeRegistry registry,
                                           NodeInfo self,
                                           ChatMessage msg) {
